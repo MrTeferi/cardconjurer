@@ -17,6 +17,9 @@ dev/*
 /.idea
 /.git
 
+# volume mounts
+local_art
+
 # misc
 .DS_Store
 .env.local
