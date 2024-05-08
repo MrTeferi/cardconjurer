@@ -4053,6 +4053,9 @@ async function addTextbox(textboxType) {
 }
 //ART TAB
 function uploadArt(imageSource, otherParams) {
+	if (!imageSource.includes('http')) {
+		imageSource = '/local_art/' + imageSource;
+	}
 	art.src = imageSource;
 	if (otherParams && otherParams == 'autoFit') {
 		art.onload = function() {
