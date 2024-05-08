@@ -11,7 +11,7 @@ start:
 		--hostname 127.0.0.1 \
 		--publish 4242:4242 \
 		--name cardconjurer-client \
-		--volume ./:/usr/share/nginx/html/:ro \
+		--volume ./local_art/:/usr/share/nginx/html/local_art/:ro \
 		"cardconjurer-client"
 
 stop:
