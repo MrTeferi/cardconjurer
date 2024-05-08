@@ -78,6 +78,12 @@ Open your Browser with the following URL
 
 http://localhost:4242/
 
+When you're done making cards, run the following command to stop the application:
+
+```bash
+$ make stop
+```
+
 ### Important
 
 Be sure, that you are running Docker Desktop under Windows or Mac before you can run the make command.
