@@ -160,6 +160,15 @@ function drawSheetReal() {
   }
 }
 
+function clearSheet() {
+  const canvas = document.querySelector("canvas");
+
+  const context = canvas.getContext("2d");
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  imageList = [];
+}
+
 function downloadCanvas() {
   var download = document.createElement("a");
   download.download = "print.png";
