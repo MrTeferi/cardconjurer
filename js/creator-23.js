@@ -4263,6 +4263,28 @@ function uploadSetSymbol(imageSource, otherParams) {
 		};
 	}
 }
+async function uploadLocalSetSymbol(imageName, otherParams) {
+	// Try different paths for local set symbols, prioritizing custom over official and svgs over pngs.
+	if (otherParams && otherParams == 'resetSetSymbol') {
+		setSymbol.onload = function() {
+			resetSetSymbol();
+			setSymbol.onload = setSymbolEdited;
+		};
+	}
+	const variations = [
+		`/img/setSymbols/custom/${imageName}.svg`,
+		`/img/setSymbols/custom/${imageName}.png`,
+		`/img/setSymbols/official/${imageName}.svg`,
+		`/img/setSymbols/official/${imageName}.png`,
+	]
+	for (url of variations) {
+		response = await fetch(url, {method: "HEAD"});
+		if (response.ok) {
+			setSymbol.src = url;
+			break;
+		}
+	}
+}
 function setSymbolEdited() {
 	card.setSymbolSource = setSymbol.src;
 	if (document.querySelector('#lockSetSymbolURL').checked) {
@@ -4306,9 +4328,9 @@ function fetchSetSymbol() {
 	}
 	var setRarity = document.querySelector('#set-symbol-rarity').value.toLowerCase().replace('uncommon', 'u').replace('common', 'c').replace('rare', 'r').replace('mythic', 'm') || 'c';
 	if (['sld', 'a22', 'a23', 'j22'].includes(setCode.toLowerCase())) {
-		uploadSetSymbol(fixUri(`/img/setSymbols/custom/${setCode.toLowerCase()}-${setRarity}.png`), 'resetSetSymbol');
+		uploadLocalSetSymbol(`${setCode.toLowerCase()}-${setRarity}`, 'resetSetSymbol');
 	} else if (['cc', 'logan', 'joe'].includes(setCode.toLowerCase())) {
-		uploadSetSymbol(fixUri(`/img/setSymbols/custom/${setCode.toLowerCase()}-${setRarity}.svg`), 'resetSetSymbol');
+		uploadLocalSetSymbol(`${setCode.toLowerCase()}-${setRarity}`, 'resetSetSymbol');
 	} else if (document.querySelector("#set-symbol-source").value == 'gatherer') {
 		if (setSymbolAliases.has(setCode.toLowerCase())) setCode = setSymbolAliases.get(setCode.toLowerCase());
 		uploadSetSymbol('http://gatherer.wizards.com/Handlers/Image.ashx?type=symbol&set=' + setCode + '&size=large&rarity=' + setRarity, 'resetSetSymbol');
@@ -4316,12 +4338,8 @@ function fetchSetSymbol() {
 		if (setSymbolAliases.has(setCode.toLowerCase())) setCode = setSymbolAliases.get(setCode.toLowerCase());
 		uploadSetSymbol('https://api.hexproof.io/symbols/set/' + setCode + '/' + setRarity, 'resetSetSymbol');
 	} else {
-		var extension = 'svg';
-		if (['moc', 'ltr', 'ltc', 'cmm', 'who', 'scd', 'woe', 'wot', 'woc', 'lci', 'lcc', 'mkm', 'mkc', 'otj', 'otc'].includes(setCode.toLowerCase())) {
-			extension = 'png';
-		}
 		if (setSymbolAliases.has(setCode.toLowerCase())) setCode = setSymbolAliases.get(setCode.toLowerCase());
-		uploadSetSymbol(fixUri(`/img/setSymbols/official/${setCode.toLowerCase()}-${setRarity}.` + extension), 'resetSetSymbol');
+		uploadLocalSetSymbol(`${setCode.toLowerCase()}-${setRarity}`, 'resetSetSymbol');
 	}
 }
 function lockSetSymbolCode() {
