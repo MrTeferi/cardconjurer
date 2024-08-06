@@ -1,74 +1,308 @@
 <!-- START OF CONTENT -->
-    <h2 class='readable-background header-extension title center margin-bottom-large'>Printing Tool</h2>
-    <div class='readable-background padding layer margin-bottom-large'>
-		<h4 class='collapsible collapsed center padding margin-bottom' onclick='toggleCollapse(event);'>Configure Page Settings</h4>
-        <div>
-    		<h5 class='margin-bottom padding input-description'>Select your paper size</h5>
-    		<select onchange='setPageSize(this.value.split(","));' class='input margin-bottom'>
-    			<option value='8.5,11'>Letter (8.5 by 11)</option>
-    			<option value='8.2667,11.6934'>A4</option>
-    		</select>
-            <h5 class='margin-bottom padding input-description'>Toggle the paper orientation (Portrait / Landscape)</h5>
-            <button onclick='changeOrientation();' class='input margin-bottom'>Toggle orientation</button>
-            <h5 class='margin-bottom padding input-description'>Select a default card size</h5>
-            <select onchange='setCardSize(this.value.split(","));' class='input margin-bottom'>
-                <option value='2.5,3.5'>2.5 x 3.5 Inches</option>
-                <option value='2.48031,3.46457'>63 x 88 mm</option>
-            </select>
-            <h5 class='margin-bottom padding input-description'>Or enter your own card size</h5>
-            <div class='margin-bottom split-grid'>
-                <input type='number' id='cardWidth' class='input' value='1500' onchange='setCardSize();'>
-                <input type='number' id='cardHeight' class='input' value='2100' onchange='setCardSize();'>
-            </div>
-            <h5 class='margin-bottom padding input-description'>Enter your bleed edge thickness (in pixels)</h5>
-            <input type='number' id='cardPadding' class='input margin-bottom' value='0' min='0' onchange='setPaddingSize(this.value);'>
-    		<h5 class='margin-bottom padding input-description'>Enter the distance between cards (in pixels)</h5>
-            <input type='number' id='cardMargin' class='input margin-bottom' value='30' min='0' onchange='setMarginSize(this.value);'>
-            <h5 class='margin-bottom padding input-description'>Set PPI (pixels per inch)</h5>
-            <input type='number' id='cardPPI' class='input margin-bottom' value='600' min='1' max='2400' onchange='setPPI(this.value);'>
-            <h5 class='margin-bottom padding input-description'>Include cutting aids (colored marks to help guide cuts; may not be visible in preview)</h5>
-            <label class='checkbox-container input margin-bottom'>Cutting aids
-                <input id='cuttingAidsCheckbox' type='checkbox' onchange='setCuttingAids(this.checked);'>
-                <span class='checkmark'></span>
-            </label>
-            <h5 class='margin-bottom padding input-description'>Images already include bleed edge</h5>
-            <label class='checkbox-container input margin-bottom'>Bleed edge included
-                <input id='bleedEdgeCheckbox' type='checkbox' onchange='setBleedEdge(this.checked);' checked>
-                <span class='checkmark'></span>
-            </label>
-            <h5 class='margin-bottom padding input-description'>Bleed Edge Color</h5>
-            <input id='bleedEdgeColor' type='color' class='input margin-bottom' onchange='setBleedEdgeColor(this.value);'>
-            <h5 class='margin-bottom padding input-description'>Save your current configurations as default</h5>
-            <button onclick='saveDefaults();' class='input margin-bottom'>Save configuration</button>
-        </div>
-	</div>
-    <div class="layer margin-bottom-large">
-        <div class="drop-area" style="padding: 1rem">
-            <div class='padding margin-bottom-large readable-background'>
-                <h5 class='margin-bottom padding input-description'>Upload the images that you'd like to print, or drag-and-drop them</h5>
-                <input type='file' multiple accept='.png, .svg, .jpg, .jpeg, .bmp' placeholder='File Upload' class='input' oninput='uploadFiles(event.target.files, uploadCard, "filename");' data-dropFunction='uploadCard' data-otherParams='filename'>
-            </div>
-            <div class="center">
-                <canvas style='height: auto; max-width:850px; width: 100%; background: #fff;'></canvas>
-            </div>
-        </div>
+<h2
+  class="readable-background header-extension title center margin-bottom-large"
+>
+  Printing Tool
+</h2>
+<div class="readable-background padding layer margin-bottom-large">
+  <h4
+    class="collapsible collapsed center padding margin-bottom"
+    onclick="toggleCollapse(event);"
+  >
+    Configure Page Settings
+  </h4>
+  <div>
+    <h5 class="margin-bottom padding input-description">
+      Select your paper size
+    </h5>
+    <select
+      onchange='setPageSize(this.value.split(","));'
+      class="input margin-bottom"
+    >
+      <option value="8.5,11">Letter (8.5 by 11)</option>
+      <option value="8.2667,11.6934">A4</option>
+    </select>
+    <h5 class="margin-bottom padding input-description">
+      Toggle the paper orientation (Portrait / Landscape)
+    </h5>
+    <button onclick="changeOrientation();" class="input margin-bottom">
+      Toggle orientation
+    </button>
+    <h5 class="margin-bottom padding input-description">
+      Select a default card size
+    </h5>
+    <select
+      onchange='setCardSize(this.value.split(","));'
+      class="input margin-bottom"
+    >
+      <option value="2.5,3.5">2.5 x 3.5 Inches</option>
+      <option value="2.48031,3.46457">63 x 88 mm</option>
+    </select>
+    <h5 class="margin-bottom padding input-description">
+      Or enter your own card size
+    </h5>
+    <div class="margin-bottom split-grid">
+      <input
+        type="number"
+        id="cardWidth"
+        class="input"
+        value="1500"
+        onchange="setCardSize();"
+      />
+      <input
+        type="number"
+        id="cardHeight"
+        class="input"
+        value="2100"
+        onchange="setCardSize();"
+      />
     </div>
-    <div class='readable-background padding layer margin-bottom-large'>
-		<h3 class='download padding' onclick='downloadCanvas();'>Download your Sheet (PNG)</h3>
-		<h4 class='padding center'>(Can take a few seconds)</h4>
-	</div>
-	<div class='readable-background padding layer margin-bottom-large'>
-		<h3 class='download padding' onclick='downloadPDF();'>Download your Sheet (PDF)</h3>
-		<h4 class='padding center'>(WARNING: This can take around 15 seconds...)</h4>
-	</div>
-    <div class="readable-background layer margin-bottom-large">
-        <h3 class='padding margin-bottom center'>
-            Want to see your custom cards on the kitchen table?
-        </h3>
-        <h4 class='padding'>
-        	Upload up to nine images, and they will automatically arrange themselves on an 8.5" by 11" sheet, so you can print them at home at up to 600PPI.
-        </h4>
+    <h5 class="margin-bottom padding input-description">
+      Enter your bleed edge thickness (in pixels)
+    </h5>
+    <input
+      type="number"
+      id="cardPadding"
+      class="input margin-bottom"
+      value="0"
+      min="0"
+      onchange="setPaddingSize(this.value);"
+    />
+    <h5 class="margin-bottom padding input-description">
+      Enter the distance between cards (in pixels)
+    </h5>
+    <input
+      type="number"
+      id="cardMargin"
+      class="input margin-bottom"
+      value="30"
+      min="0"
+      onchange="setMarginSize(this.value);"
+    />
+    <h5 class="margin-bottom padding input-description">
+      Set PPI (pixels per inch)
+    </h5>
+    <input
+      type="number"
+      id="cardPPI"
+      class="input margin-bottom"
+      value="600"
+      min="1"
+      max="2400"
+      onchange="setPPI(this.value);"
+    />
+    <h5 class="margin-bottom padding input-description">
+      Include cutting aids (colored marks to help guide cuts; may not be visible
+      in preview)
+    </h5>
+    <label class="checkbox-container input margin-bottom"
+      >Cutting aids
+      <input
+        id="cuttingAidsCheckbox"
+        type="checkbox"
+        onchange="setCuttingAids(this.checked);"
+      />
+      <span class="checkmark"></span>
+    </label>
+    <h5 class="margin-bottom padding input-description">
+      Images already include bleed edge
+    </h5>
+    <label class="checkbox-container input margin-bottom"
+      >Bleed edge included
+      <input
+        id="bleedEdgeCheckbox"
+        type="checkbox"
+        onchange="setBleedEdge(this.checked);"
+        checked
+      />
+      <span class="checkmark"></span>
+    </label>
+    <h5 class="margin-bottom padding input-description">Bleed Edge Color</h5>
+    <input
+      id="bleedEdgeColor"
+      type="color"
+      class="input margin-bottom"
+      onchange="setBleedEdgeColor(this.value);"
+    />
+    <h5 class="margin-bottom padding input-description">
+      Save your current configurations as default
+    </h5>
+    <button onclick="saveDefaults();" class="input margin-bottom">
+      Save configuration
+    </button>
+  </div>
+</div>
+<div class="layer margin-bottom-large">
+  <div class="drop-area" style="padding: 1rem">
+    <div class="padding margin-bottom-large readable-background">
+      <h5 class="margin-bottom padding input-description">
+        Upload the images that you'd like to print, or drag-and-drop them
+      </h5>
+      <div
+        class="upload-box"
+        style="
+          border: 2px dashed #ccc;
+          border-radius: 10px;
+          padding: 20px;
+          text-align: center;
+          cursor: pointer;
+          margin-bottom: 1rem;
+          position: relative;
+        "
+        onclick="document.getElementById('file-upload').click()"
+        ondragover="event.preventDefault()"
+        ondrop="handleDrop(event)"
+      >
+        <input
+          id="file-upload"
+          type="file"
+          multiple
+          accept=".png, .svg, .jpg, .jpeg, .bmp"
+          style="display: none"
+          onchange="handleFiles(this.files)"
+        />
+        <div style="font-size: 2rem; color: #ccc">
+          <svg
+            fill="gray"
+            height="30px"
+            width="30px"
+            version="1.1"
+            id="Capa_1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 374.116 374.116"
+            xml:space="preserve"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <g>
+                <path
+                  d="M344.058,207.506c-16.568,0-30,13.432-30,30v76.609h-254v-76.609c0-16.568-13.432-30-30-30c-16.568,0-30,13.432-30,30 v106.609c0,16.568,13.432,30,30,30h314c16.568,0,30-13.432,30-30V237.506C374.058,220.938,360.626,207.506,344.058,207.506z"
+                ></path>
+                <path
+                  d="M123.57,135.915l33.488-33.488v111.775c0,16.568,13.432,30,30,30c16.568,0,30-13.432,30-30V102.426l33.488,33.488 c5.857,5.858,13.535,8.787,21.213,8.787c7.678,0,15.355-2.929,21.213-8.787c11.716-11.716,11.716-30.71,0-42.426L208.271,8.788 c-11.715-11.717-30.711-11.717-42.426,0L81.144,93.489c-11.716,11.716-11.716,30.71,0,42.426 C92.859,147.631,111.855,147.631,123.57,135.915z"
+                ></path>
+              </g>
+            </g>
+          </svg>
+          <!-- Ícone de upload de arquivo -->
+        </div>
+      </div>
+      <div
+        id="thumbnails"
+        style="display: flex; flex-wrap: wrap; gap: 10px"
+      ></div>
+      <h5 class="margin-bottom padding input-description">
+        Choose the number of copies you'd like to print
+      </h5>
+      <div class="input-grid margin-bottom">
+        <input
+          id="repeat-count"
+          type="number"
+          min="1"
+          value="1"
+          class="input"
+          placeholder="Number of repetitions"
+          style="text-align: center"
+        />
+        <button onclick="repeatImage();" class="input">Add Images</button>
+        <button onclick="clearSheet();" class="input">Reset Page</button>
+      </div>
     </div>
-	<script defer src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js'></script>
-    <script defer src="/print/print.js"></script>
+    <div class="center">
+      <canvas
+        style="height: auto; max-width: 850px; width: 100%; background: #fff"
+      ></canvas>
+    </div>
+  </div>
+</div>
+<div class="readable-background padding layer margin-bottom-large">
+  <h3 class="download padding" onclick="downloadCanvas();">
+    Download your Sheet (PNG)
+  </h3>
+  <h4 class="padding center">(Can take a few seconds)</h4>
+</div>
+<div class="readable-background padding layer margin-bottom-large">
+  <h3 class="download padding" onclick="downloadPDF();">
+    Download your Sheet (PDF)
+  </h3>
+  <h4 class="padding center">(WARNING: This can take around 15 seconds...)</h4>
+</div>
+<div class="readable-background layer margin-bottom-large">
+  <h3 class="padding margin-bottom center">
+    Want to see your custom cards on the kitchen table?
+  </h3>
+  <h4 class="padding">
+    Upload up to nine images, and they will automatically arrange themselves on
+    an 8.5" by 11" sheet, so you can print them at home at up to 600PPI.
+  </h4>
+</div>
+<script>
+  let selectedFiles = [];
+
+  function repeatImage() {
+    const repeatCount = document.getElementById("repeat-count").value;
+
+    if (selectedFiles.length > 0) {
+      for (let i = 0; i < repeatCount; i++) {
+        console.log(`Uploading file ${i + 1} of ${repeatCount}`);
+        uploadFiles(selectedFiles, uploadCard, "filename");
+      }
+    }
+
+    // clear selected files
+    selectedFiles = [];
+
+    // clear the input
+    document.querySelector("input[type='file']").value = "";
+
+    // clear the repeat count
+    document.getElementById("repeat-count").value = 1;
+
+    // clear the thumbnails
+    document.getElementById("thumbnails").innerHTML = "";
+  }
+
+  function handleDrop(event) {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    handleFiles(files);
+  }
+
+  function handleFiles(files) {
+    selectedFiles.push(...files);
+
+    const thumbnails = document.getElementById("thumbnails");
+
+    for (const file of files) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const thumbnail = document.createElement("div");
+        thumbnail.style.position = "relative";
+        thumbnail.innerHTML = `
+          <img src="${e.target.result}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;" />
+          <button onclick="removeFile(this, '${file.name}')" style="position: absolute; top: 0; right: 0; background: #880808; color: white; border: none; border-radius: 50%; cursor: pointer;">&times;</button>
+        `;
+        thumbnails.appendChild(thumbnail);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function removeFile(button, fileName) {
+    const thumbnail = button.parentElement;
+    thumbnail.remove();
+    selectedFiles = selectedFiles.filter((file) => file.name !== fileName);
+  }
+</script>
+<script
+  defer
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"
+></script>
+<script defer src="/print/print.js"></script>
 <!-- END OF CONTENT -->
