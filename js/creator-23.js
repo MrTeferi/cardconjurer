@@ -4089,13 +4089,15 @@ async function addTextbox(textboxType) {
 }
 //ART TAB
 function uploadArt(imageSource, otherParams) {
-	art.src = imageSource;
-	if (otherParams && otherParams == 'autoFit') {
-		art.onload = function() {
-			autoFitArt();
-			art.onload = artEdited;
-		};
-	}
+	imageURL(imageSource, (src) => {
+		art.src = src
+		if (otherParams && otherParams == 'autoFit') {
+			art.onload = function() {
+				autoFitArt();
+				art.onload = artEdited;
+			};
+		}
+	});
 }
 function artEdited() {
 	card.artSource = art.src;
