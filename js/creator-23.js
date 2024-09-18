@@ -4097,7 +4097,7 @@ function uploadArt(imageSource, otherParams) {
 				art.onload = artEdited;
 			};
 		}
-	});
+	}, otherParams);
 }
 function artEdited() {
 	card.artSource = art.src;
@@ -5083,7 +5083,7 @@ async function loadCard(selectedCardKey) {
 		document.querySelector('#art-y').value = scaleY(card.artY) - scaleHeight(card.marginY);
 		document.querySelector('#art-zoom').value = card.artZoom * 100;
 		document.querySelector('#art-rotate').value = card.artRotate || 0;
-		uploadArt(card.artSource);
+		uploadArt(card.artSource, 'noproxy');
 		document.querySelector('#setSymbol-x').value = scaleX(card.setSymbolX) - scaleWidth(card.marginX);
 		document.querySelector('#setSymbol-y').value = scaleY(card.setSymbolY) - scaleHeight(card.marginY);
 		document.querySelector('#setSymbol-zoom').value = card.setSymbolZoom * 100;
@@ -5258,7 +5258,7 @@ function imageURL(url, destination, otherParams) {
 	// If an image URL does not have HTTP in it, assume it's a local file in the repo local_art directory.
 	if (!url.includes('http')) {
 		imageurl = '/local_art/' + url;
-	} else if (params.get('noproxy') != '') {
+	} else if (params.get('noproxy') != '' && (!otherParams || otherParams != 'noproxy')) {
 		//CORS PROXY LINKS
 		//Previously: https://cors.bridged.cc/
 		imageurl = 'https://corsproxy.io/?' + encodeURIComponent(url);
